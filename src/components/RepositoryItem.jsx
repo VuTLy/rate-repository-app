@@ -60,31 +60,45 @@ const formatCount = (count) => {
 };
 
 const RepositoryItem = ({ item }) => {
+  // Defaults for missing fields
+  const {
+    fullName = 'N/A',
+    description = 'No description',
+    language = 'Unknown',
+    forksCount = 0,
+    stargazersCount = 0,
+    ratingAverage = 0,
+    reviewCount = 0,
+    ownerAvatarUrl,
+  } = item || {};
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
+        {ownerAvatarUrl ? (
+          <Image style={styles.avatar} source={{ uri: ownerAvatarUrl }} />
+        ) : null}
         <View style={styles.infoContainer}>
-          <Text style={styles.fullName}>{item.fullName}</Text>
-          <Text style={styles.description}>{item.description}</Text>
-          <Text style={styles.language}>{item.language}</Text>
+          <Text style={styles.fullName}>{fullName}</Text>
+          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.language}>{language}</Text>
         </View>
       </View>
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{formatCount(item.stargazersCount)}</Text>
+          <Text style={styles.statNumber}>{formatCount(stargazersCount)}</Text>
           <Text style={styles.statLabel}>Stars</Text>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{formatCount(item.forksCount)}</Text>
+          <Text style={styles.statNumber}>{formatCount(forksCount)}</Text>
           <Text style={styles.statLabel}>Forks</Text>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{item.reviewCount}</Text>
+          <Text style={styles.statNumber}>{reviewCount}</Text>
           <Text style={styles.statLabel}>Reviews</Text>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{item.ratingAverage}</Text>
+          <Text style={styles.statNumber}>{ratingAverage}</Text>
           <Text style={styles.statLabel}>Rating</Text>
         </View>
       </View>

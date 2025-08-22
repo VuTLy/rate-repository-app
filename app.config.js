@@ -1,4 +1,7 @@
-{
+/* eslint-env node */
+import 'dotenv/config';
+
+export default {
   "expo": {
     "name": "rate-repository-app",
     "slug": "rate-repository-app",
@@ -25,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    extra: {
+      // eslint-disable-next-line no-undef
+      env: process.env.ENV,
+      // eslint-disable-next-line no-undef
+      apolloUri: process.env.APOLLO_URI
+    },
   }
 }

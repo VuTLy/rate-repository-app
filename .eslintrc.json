@@ -1,14 +1,15 @@
 {
   "plugins": ["react", "react-native"],
   "settings": {
-    "react": {
-      "version": "detect"
-    }
+    "react": { "version": "detect" }
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "@babel/eslint-parser",
   "env": {
-    "react-native/react-native": true
+    "es2021": true,
+    "browser": true,
+    "react-native/react-native": true,
+    "node": true
   },
   "rules": {
     "react/prop-types": "off",

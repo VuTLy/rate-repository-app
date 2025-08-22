@@ -2,7 +2,9 @@ import React from 'react';
 import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-native';
 import theme from '../theme';
+import useSignIn from '../hooks/useSignIn';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,18 +20,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   inputError: {
-    borderColor: '#d73a4a', // red border for invalid field
+    borderColor: '#d73a4a',
   },
   errorText: {
-    color: '#d73a4a', // red error message
+    color: '#d73a4a',
     marginBottom: 10,
-  },
-  button: {
-    marginTop: 10,
   },
 });
 
-// Yup schema for validation
 const signInSchema = yup.object().shape({
   username: yup.string().required('Username is required'),
   password: yup.string().required('Password is required'),
@@ -37,9 +35,17 @@ const signInSchema = yup.object().shape({
 
 const SignIn = () => {
   const initialValues = { username: '', password: '' };
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    try {
+      const { data } = await signIn(values);
+      console.log('Authenticated user data:', data);
+      navigate('/'); // redirect to repository list after sign in
+    } catch (e) {
+      console.error('Sign in error:', e);
+    }
   };
 
   return (
@@ -89,3 +95,4 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
