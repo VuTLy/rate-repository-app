@@ -26,7 +26,7 @@ const AppBar = () => {
 
   const handleSignOut = async () => {
     await authStorage.removeAccessToken();
-    await apolloClient.resetStore(); // refresh queries
+    await apolloClient.resetStore();
   };
 
   return (
@@ -37,6 +37,8 @@ const AppBar = () => {
         contentContainerStyle={styles.tabsContainer}
       >
         <AppBarTab text="Repositories" to="/" />
+        {data?.me && <AppBarTab text="Create a review" to="/create-review" />}
+        {data?.me && <AppBarTab text="My reviews" to="/my-reviews" />}
         {data?.me ? (
           <Button title="Sign out" onPress={handleSignOut} />
         ) : (

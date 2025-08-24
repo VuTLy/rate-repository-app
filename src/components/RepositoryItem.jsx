@@ -1,34 +1,13 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Button, Linking } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    backgroundColor: 'white',
-  },
-  topContainer: {
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  infoContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  fullName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  description: {
-    color: '#586069',
-    marginBottom: 5,
-  },
+  container: { padding: 10, backgroundColor: 'white' },
+  topContainer: { flexDirection: 'row', marginBottom: 10 },
+  avatar: { width: 50, height: 50, borderRadius: 5, marginRight: 10 },
+  infoContainer: { flex: 1, justifyContent: 'center' },
+  fullName: { fontWeight: 'bold', fontSize: 16, marginBottom: 5 },
+  description: { color: '#586069', marginBottom: 5 },
   language: {
     alignSelf: 'flex-start',
     backgroundColor: '#0366d6',
@@ -38,29 +17,17 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     fontSize: 12,
   },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 10,
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  statLabel: {
-    color: '#586069',
-  },
+  statsContainer: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 },
+  statItem: { alignItems: 'center' },
+  statNumber: { fontWeight: 'bold', fontSize: 16 },
+  statLabel: { color: '#586069' },
+  githubButton: { marginTop: 10 },
 });
 
-const formatCount = (count) => {
-  return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count;
-};
+const formatCount = (count) => (count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count));
 
-const RepositoryItem = ({ item }) => {
-  // Defaults for missing fields
+/* -------------------- Pure container -------------------- */
+export const RepositoryItemContainer = ({ item, showGitHubButton = false, onPressGitHub }) => {
   const {
     fullName = 'N/A',
     description = 'No description',
@@ -73,11 +40,9 @@ const RepositoryItem = ({ item }) => {
   } = item || {};
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="repositoryItem">
       <View style={styles.topContainer}>
-        {ownerAvatarUrl ? (
-          <Image style={styles.avatar} source={{ uri: ownerAvatarUrl }} />
-        ) : null}
+        {ownerAvatarUrl && <Image style={styles.avatar} source={{ uri: ownerAvatarUrl }} />}
         <View style={styles.infoContainer}>
           <Text style={styles.fullName}>{fullName}</Text>
           <Text style={styles.description}>{description}</Text>
@@ -102,7 +67,29 @@ const RepositoryItem = ({ item }) => {
           <Text style={styles.statLabel}>Rating</Text>
         </View>
       </View>
+      {showGitHubButton && onPressGitHub && (
+        <View style={styles.githubButton}>
+          <Button title="Open in GitHub" onPress={onPressGitHub} />
+        </View>
+      )}
     </View>
+  );
+};
+
+/* -------------------- Component with side effect -------------------- */
+const RepositoryItem = ({ item, showGitHubButton = false }) => {
+  const openGitHub = () => {
+    if (item?.url) {
+      Linking.openURL(item.url);
+    }
+  };
+
+  return (
+    <RepositoryItemContainer
+      item={item}
+      showGitHubButton={showGitHubButton}
+      onPressGitHub={showGitHubButton ? openGitHub : undefined}
+    />
   );
 };
 

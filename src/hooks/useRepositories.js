@@ -1,15 +1,18 @@
 import { useQuery } from '@apollo/client';
 import { GET_REPOSITORIES } from '../graphql/queries';
 
-const useRepositories = () => {
-  const { data, loading, error } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: 'cache-and-network', // ensures UI updates with cached + network data
+const useRepositories = ({ orderBy, orderDirection, searchKeyword }) => {
+  const { data, loading, refetch } = useQuery(GET_REPOSITORIES, {
+    variables: { orderBy, orderDirection, searchKeyword },
+    fetchPolicy: 'cache-and-network',
   });
 
   return {
-    repositories: data ? data.repositories.edges.map(edge => edge.node) : [],
+    repositories: data
+      ? data.repositories.edges.map(edge => edge.node)
+      : [],
     loading,
-    error,
+    refetch,
   };
 };
 
